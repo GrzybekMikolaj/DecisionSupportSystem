@@ -6,32 +6,49 @@
 {% endblock %} 
 
 {% block content %} 
-    <div class="container">
-    <h1 class="display-4">Find Device</h1>
+<!-- User CSV data submission -->
+<div class="section" id="section1">
+    <p>Sekcja 1</p>
+    <div class="container">    
+        <div class="container">
+            <h2>1. Submit a File</h2>
+            <form id="fileForm">
+                <label for="file">Choose a file:</label>
+                <input type="file" id="fileCsv" accept=".csv">
+                <br><br>
+            </form>
+        </div>
+        <div id="result"></div>
+        <!-- Button to Trigger Post --> 
+        <button onclick="handleFileUpload()">Submit Data</button>
+        <button onclick="scrollToSection('section2')">Next</button>
+
     </div>
+</div>
 
-    <div class="container">
+<!-- Algorithm settings -->
+<div class="section" id="section2">
+    <p>Sekcja 2</p>
+    
+    <h2>2. Choose an algorithm</h2>
+    <form id="algoForm">
+        <label for="dropdownAlgo">Select an Option:</label>
+        <select id="dropdownAlgo" name="Algorithm">
+            <option value="option1">TOPSIS</option>
+            <option value="option2">RSM</option>
+            <option value="option2">SCMC</option>
+        </select>
+    </form>
 
-        <h2>1. Submit a File</h2>
+    <h2> 3. Choose weigts for the algo</h2>
+    <label for="weightsInput">Podaj wagi dla algorytmu (oddzielone przecinkiem):</label>
+    <input type="text" id="weightsInput" required>
+    <button onclick="scrollToSection('section3')">Next</button>
+</div>
 
-        <form id="fileForm">
-            <label for="file">Choose a file:</label>
-            <input type="file" id="file" name="file" accept=".txt, .pdf, .doc, .docx">
-            <br><br>
-        </form>
-
-        <h2>2. Choose an algorithm</h2>
-
-        <form id="algoForm">
-            <label for="dropdownAlgo">Select an Option:</label>
-            <select id="dropdownAlgo" name="Algorithm">
-                <option value="option1">TOPSIS</option>
-                <option value="option2">RSM</option>
-                <option value="option2">SCMC</option>
-            </select>
-        </form>
-
-        <!-- Button to Trigger Post -->
-        <button onclick="postData()">Submit Data</button>
-    </div>
+<!-- Data representation -->
+<div class="section" id="section3">
+    <p>Sekcja 3</p>
+    <button onclick="scrollToSection('section1')">Top</button>
+</div>
 {% endblock %} 
