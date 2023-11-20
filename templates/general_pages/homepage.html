@@ -1,0 +1,37 @@
+{% extends "shared/base.html" %}
+
+
+{% block title %} 
+  <title>Optimize your choice</title>
+{% endblock %} 
+
+{% block content %} 
+    <div class="container">
+    <h1 class="display-4">Find Device</h1>
+    </div>
+
+    <div class="container">
+
+        <h2>1. Submit a File</h2>
+
+        <form id="fileForm">
+            <label for="file">Choose a file:</label>
+            <input type="file" id="file" name="file" accept=".txt, .pdf, .doc, .docx">
+            <br><br>
+        </form>
+
+        <h2>2. Choose an algorithm</h2>
+
+        <form id="algoForm">
+            <label for="dropdownAlgo">Select an Option:</label>
+            <select id="dropdownAlgo" name="Algorithm">
+                <option value="option1">TOPSIS</option>
+                <option value="option2">RSM</option>
+                <option value="option2">SCMC</option>
+            </select>
+        </form>
+
+        <!-- Button to Trigger Post -->
+        <button onclick="postData()">Submit Data</button>
+    </div>
+{% endblock %} 

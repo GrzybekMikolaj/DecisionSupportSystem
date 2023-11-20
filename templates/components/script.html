@@ -1,0 +1,35 @@
+<!-- HTML !-->
+<script>
+    // JavaScript function to handle dropdown list selection
+    function showSelected() {
+        var selectedValue = document.getElementById("algorithm").value;
+        alert("Selected: " + selectedValue);
+    }
+
+    // JavaScript function to handle post request with selected data
+    function postData() {
+        // get data from web page
+        var user_file = new FormData(document.getElementById("fileForm"));
+        var algorithm = new FormData(document.getElementById("algoForm"));
+        
+        // Parse data to JSON
+        console.log(algorithm)
+        json_data = JSON.stringify({
+                    userId: 1,
+                    title: "Fix my bugs",
+                    completed: false})
+
+        // Fetch API to send a POST request
+        fetch('/algoEnd', {
+            method: 'POST',
+            body: json_data
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+</script>
