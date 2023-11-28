@@ -95,13 +95,13 @@ def rank_alternatives(separation_measures):
     rankings = sorted(separation_measures.items(), key=lambda x: x[1], reverse=True)
     return rankings
 
-# file_path = 'data.json'
+file_path = 'static/data.json'
 
-# # Odczytaj dane z pliku JSON
-# data = read_json(file_path)
+data = read_json(file_path)
 
-# # Wywołaj funkcję topsis
-# result = topsis(data)
+result = topsis(data)
 
-# # Wyświetl wyniki
-# print("Rankings:", result)
+print("Rankings:")
+for rank, score in result:
+    rounded_score = round(score, 3)
+    print(f"{rank}: {rounded_score}")
