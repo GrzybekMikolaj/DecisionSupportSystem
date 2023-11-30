@@ -39,3 +39,23 @@ function createWeightsForm(parameters) {
     // Dodaj formularz do elementu body (możesz dostosować to, gdzie chcesz dodać formularz)
     target_div.appendChild(form);
   }
+
+
+  function showFields() {
+    // Ukryj wszystkie pola formularza
+    document.getElementById('topsisFields').classList.add('hidden');
+    document.getElementById('rsmFields').classList.add('hidden');
+    document.getElementById('spcsFields').classList.add('hidden');
+
+    // Pobierz wybraną wartość z rozwijanej listy
+    var selectedAlgorithm = document.getElementById('algorithm').value;
+
+    // Wyświetl odpowiednie pola formularza w zależności od wybranej opcji
+    if (selectedAlgorithm === 'topsis') {
+        document.getElementById('topsisFields').classList.remove('hidden');
+    } else if (selectedAlgorithm === 'rsm') {
+        document.getElementById('rsmFields').classList.remove('hidden');
+    } else if (selectedAlgorithm === 'spcs') {
+        document.getElementById('spcsFields').classList.remove('hidden');
+    }
+}

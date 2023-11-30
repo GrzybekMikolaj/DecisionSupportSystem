@@ -1,14 +1,5 @@
-import json
 import math
-
-def read_json(file_path):
-    with open(file_path, 'r') as file:
-        data = json.load(file)
-    return data
-
-def write_json(file_path, data):
-    with open(file_path, 'w') as file:
-        json.dump(data, file, indent=2)
+from file_handler import read_json
 
 def topsis(data):
     weights = {key: value for key, value in data.get("weights", {}).items() if value != 0 and isinstance(value, (int, float))}
@@ -95,7 +86,7 @@ def rank_alternatives(separation_measures):
     rankings = sorted(separation_measures.items(), key=lambda x: x[1], reverse=True)
     return rankings
 
-file_path = 'static/data.json'
+file_path = 'static/data20rand.json'
 
 data = read_json(file_path)
 

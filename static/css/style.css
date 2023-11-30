@@ -14,7 +14,6 @@
     justify-self: stretch;
     padding: 5%;
 }
-
 .fullscreen {
     height: 100%;
     width: 100%;
@@ -27,6 +26,9 @@
     padding: 0px;
     justify-items: stretch;
     justify-content: space-evenly;
+}
+.hidden {
+  display: none;
 }
 #drop-area {
       border: 2px dashed #ccc;

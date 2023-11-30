@@ -1,0 +1,108 @@
+{
+  "M1": {
+    "marka": "samsung1",
+    "cena": 1849,
+    "pojemnosc": 1575
+  },
+  "M2": {
+    "marka": "samsung2",
+    "cena": 1737,
+    "pojemnosc": 2487
+  },
+  "M3": {
+    "marka": "samsung3",
+    "cena": 381,
+    "pojemnosc": 429
+  },
+  "M4": {
+    "marka": "samsung4",
+    "cena": 358,
+    "pojemnosc": 2092
+  },
+  "M5": {
+    "marka": "samsung5",
+    "cena": 1147,
+    "pojemnosc": 1272
+  },
+  "M6": {
+    "marka": "adata1",
+    "cena": 702,
+    "pojemnosc": 2677
+  },
+  "M7": {
+    "marka": "adata2",
+    "cena": 567,
+    "pojemnosc": 2793
+  },
+  "M8": {
+    "marka": "adata3",
+    "cena": 2751,
+    "pojemnosc": 2351
+  },
+  "M9": {
+    "marka": "adata4",
+    "cena": 2939,
+    "pojemnosc": 1737
+  },
+  "M10": {
+    "marka": "adata5",
+    "cena": 1680,
+    "pojemnosc": 1601
+  },
+  "M11": {
+    "marka": "sandisk1",
+    "cena": 2461,
+    "pojemnosc": 472
+  },
+  "M12": {
+    "marka": "sandisk2",
+    "cena": 1634,
+    "pojemnosc": 1905
+  },
+  "M13": {
+    "marka": "sandisk3",
+    "cena": 358,
+    "pojemnosc": 289
+  },
+  "M14": {
+    "marka": "sandisk4",
+    "cena": 694,
+    "pojemnosc": 2114
+  },
+  "M15": {
+    "marka": "sandisk5",
+    "cena": 639,
+    "pojemnosc": 2421
+  },
+  "M16": {
+    "marka": "lexar1",
+    "cena": 2983,
+    "pojemnosc": 136
+  },
+  "M17": {
+    "marka": "lexar2",
+    "cena": 2473,
+    "pojemnosc": 285
+  },
+  "M18": {
+    "marka": "lexar3",
+    "cena": 1596,
+    "pojemnosc": 2275
+  },
+  "M19": {
+    "marka": "lexar4",
+    "cena": 2404,
+    "pojemnosc": 603
+  },
+  "M20": {
+    "marka": "lexar5",
+    "cena": 2864,
+    "pojemnosc": 453
+  },
+    "weights": {
+        "company": 0,
+        "name": 0,
+        "cena": 0.6,
+        "pojemnosc": 0.3
+      }
+  }
