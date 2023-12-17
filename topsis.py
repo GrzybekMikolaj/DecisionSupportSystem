@@ -92,7 +92,7 @@ data = read_json(file_path)
 
 result = topsis(data)
 
-print("Rankings:")
-for rank, score in result:
-    rounded_score = round(score, 3)
-    print(f"{rank}: {rounded_score}")
+# print("Rankings:")
+# for rank, score in result:
+#     rounded_score = round(score, 3)
+#     print(f"{rank}: {rounded_score}")

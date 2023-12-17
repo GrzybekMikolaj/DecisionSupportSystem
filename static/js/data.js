@@ -29,110 +29,77 @@ function handleFiles(files) {
             var csvdata = event.target.result;
             csv_arr = CSVToArray(csvdata, ',');
             window.globalVar = csv_arr;
-            // GET data from first row
-            params = csv_arr[0];
 
-            // Identify paramters for algorithm
-            
+            console.log(window.globalVar);            
 
-            // Prepare Section 2 content and scroll to section 2
-            createWeightsForm(params);
-            scrollToSection('section2');
-        
         }
     }
 }
 
 function mergeData(){
-    var inputCount = document.getElementById('weightsForm').getElementsByTagName('input').length;
-    // console.log(inputCount);
-    wght_str = 'weight';
-    weightsArr = [];
-    for (var i = 0; i < inputCount; i++) {
-        str = wght_str.concat('', i);
-        // console.log(str);
-        var temp_data = document.getElementById(str).value;
-        weightsArr.push(temp_data);
+
+    // Sprawdz jaki to algorytm
+    var selected_algo = document.getElementById('algorithm').value;
+
+    // Wyciagnij parametry z wybrynaego algorytmu
+    if (selected_algo = 'topsis'){
+        var params_input = document.querySelectorAll("#form_params > #topsis_params > input");
+        var algo_settings = [];
+
+        algo_settings[0] = String(selected_algo);
+        algo_settings[1] = String(0);
+        
+        var i = 2;
+        for (const input of params_input){
+            algo_settings[i] = input.value;
+            i = i+1;
+        }
     }
-    weightsArr.unshift('');
-    weightsArr.unshift('Weights');
-    // console.log(weightsArr);
-    // console.log(window.globalVar);
-    window.globalVar.push(weightsArr);
-    dataToSend = window.globalVar;
-    // console.log(window.globalVar);
-    postCsvData(dataToSend);
+    // TODO: Dopisz brakujące algorytmy 
+
+    window.globalVar.splice(1, 0, algo_settings);
+    merged_data = window.globalVar;
+    // console.log(merged_data);
+
+    postCsvData(merged_data);
 }
 
-// JavaScript function to handle post request with selected data
-function postCsvData(data) {
-  
-    // Parse data to JSON
-    console.log(data);
+ 
+function postCsvData(input_data) {
+    console.log(input_data);
+    // console.log(header);
+    // console.log(data);
+    const [header, ...rows] = input_data;
 
-    // Usunięcie pierwszego wiersza, który zawiera nagłówki kolumn
-    const headers = data.shift();
-
-    // Przygotowanie obiektu na podstawie pozostałych wierszy
-    const dataObject = {};
-    data.forEach(row => {
-    const id = row[0];
-    const rowData = {};
-    headers.slice(1).forEach((header, index) => {
-        rowData[header.trim()] = isNaN(row[index + 1]) ? row[index + 1].trim() : parseFloat(row[index + 1].trim());
-    });
-    dataObject[id] = rowData;
+    const jsonObjects = {};
+    
+    rows.forEach((data) => {
+      const key = data[0];
+      jsonObjects[key] = {};
+    
+      header.slice(1).forEach((headerItem, index) => {
+        jsonObjects[key][headerItem] = isNaN(data[index + 1]) ? data[index + 1] : parseInt(data[index + 1], 10);
+      });
     });
 
-    // Dodanie "weights" do obiektu
-    const weightsRow = data.pop();
-    const weightsData = {};
-    headers.slice(1).forEach((header, index) => {
-    weightsData[header.trim()] = isNaN(weightsRow[index + 1]) ? weightsRow[index + 1].trim() : parseFloat(weightsRow[index + 1].trim());
+    const jsonString = JSON.stringify(jsonObjects, null, 1);
+    console.log(jsonString);
+
+    // Fetch API to send a POST request
+    fetch('http://127.0.0.1:8000/api/endpoint', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: jsonString
+    })
+    .then(resp => resp.json()) // or, resp.text(), etc
+    .then(data => {
+        console.log(data); // handle response data
+    })
+    .catch(error => {
+        console.error(error);
     });
-    dataObject['weights'] = weightsData;
-
-    // Konwersja obiektu do JSON
-    const json_data = JSON.stringify(dataObject, null, 2);
-
-
-    json_data = JSON.stringify(data)
-    console.log(json_data);
-
-    // Tworzymy nowy obiekt Blob z danymi JSON
-    var blob = new Blob([json_data], { type: 'application/json' });
-
-    // Tworzymy link do pobrania pliku
-    var link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-
-    // Ustawiamy nazwę pliku do pobrania
-    link.download = 'dane.json';
-
-    // Dodajemy link do struktury DOM, aby uruchomić proces pobierania
-    document.body.appendChild(link);
-
-    // Symulujemy kliknięcie w link, aby uruchomić pobieranie
-    link.click();
-
-    // Usuwamy link z DOM
-    document.body.removeChild(link);
-
-
-    // // Fetch API to send a POST request
-    // fetch('/algoEnd', {
-    //     method: 'POST',
-    //     body: json_data,
-    //     headers: {
-    //         "Content-type": "application/json; charset=UTF-8"}
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    //     console.log('Success:', data);
-    // })
-    // .catch((error) => {
-    //     console.error('Error:', error);
-    // });
 }
 
 function CSVToArray( strData, strDelimiter ){
@@ -177,3 +144,9 @@ function CSVToArray( strData, strDelimiter ){
 }
 
 
+function getFormElelemets(formName){
+    var elements = document.forms[formName].elements;
+    for (i=0; i<elements.length; i++){
+    //   console.log(i);
+    }
+  }

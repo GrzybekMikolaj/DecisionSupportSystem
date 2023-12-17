@@ -43,7 +43,7 @@ function createWeightsForm(parameters) {
 
   function showFields() {
     // Ukryj wszystkie pola formularza
-    document.getElementById('topsisFields').classList.add('hidden');
+    document.getElementById('topsis_params').classList.add('hidden');
     document.getElementById('rsmFields').classList.add('hidden');
     document.getElementById('spcsFields').classList.add('hidden');
 
@@ -52,7 +52,7 @@ function createWeightsForm(parameters) {
 
     // Wyświetl odpowiednie pola formularza w zależności od wybranej opcji
     if (selectedAlgorithm === 'topsis') {
-        document.getElementById('topsisFields').classList.remove('hidden');
+        document.getElementById('topsis_params').classList.remove('hidden');
     } else if (selectedAlgorithm === 'rsm') {
         document.getElementById('rsmFields').classList.remove('hidden');
     } else if (selectedAlgorithm === 'spcs') {

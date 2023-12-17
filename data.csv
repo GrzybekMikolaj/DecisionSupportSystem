@@ -1,0 +1,7 @@
+id,marka,cena,pojemnosc,predkosc-odczytu,predkosc-zapisu
+M1,lexar-sl200,300,1000,550,400
+M2,adata-elitr-se880,300,1000,2000,2000
+M3,samsungh-t7,405,1000,1050,1000
+M4,samsung-t7,420,1000,1050,1000
+M5,sandisk-extreme,400,1000,1050,1000
+M6,sandisk-extreme-pro,625,1000,2000,2000
