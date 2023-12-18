@@ -1,4 +1,5 @@
 window.globalVar = 0;
+window.globalResult = 0;
 
 function dragOverHandler(event) {
     event.preventDefault();
@@ -30,7 +31,7 @@ function handleFiles(files) {
             csv_arr = CSVToArray(csvdata, ',');
             window.globalVar = csv_arr;
 
-            console.log(window.globalVar);            
+            // console.log(window.globalVar);            
 
         }
     }
@@ -47,9 +48,8 @@ function mergeData(){
         var algo_settings = [];
 
         algo_settings[0] = String(selected_algo);
-        algo_settings[1] = String(0);
         
-        var i = 2;
+        var i = 1;
         for (const input of params_input){
             algo_settings[i] = input.value;
             i = i+1;
@@ -66,11 +66,7 @@ function mergeData(){
 
  
 function postCsvData(input_data) {
-    console.log(input_data);
-    // console.log(header);
-    // console.log(data);
     const [header, ...rows] = input_data;
-
     const jsonObjects = {};
     
     rows.forEach((data) => {
@@ -83,7 +79,7 @@ function postCsvData(input_data) {
     });
 
     const jsonString = JSON.stringify(jsonObjects, null, 1);
-    console.log(jsonString);
+    // console.log(jsonString);
 
     // Fetch API to send a POST request
     fetch('http://127.0.0.1:8000/api/endpoint', {
@@ -93,14 +89,26 @@ function postCsvData(input_data) {
         },
         body: jsonString
     })
-    .then(resp => resp.json()) // or, resp.text(), etc
+    .then(resp => resp.json()) 
     .then(data => {
-        console.log(data); // handle response data
+        console.log(data);
+
+        const tableNode = document.getElementById("table-container");
+        tableNode.innerHTML = '';
+        scrollToSection('section3');
+        createTable(7, 3, data);
     })
     .catch(error => {
         console.error(error);
     });
 }
+
+// function handleServerResp(data){
+//     console.log(data)
+//     var rows = 7; // +1 for header
+//     var cols = 3;
+//     return (rows, cols)
+// }
 
 function CSVToArray( strData, strDelimiter ){
     strDelimiter = (strDelimiter || ",");
