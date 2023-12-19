@@ -18,7 +18,7 @@ def start_application():
 
 app = start_application()
 
-@app.post("/api/endpoint")
+@app.post("https://decisionsupportsystem-grzybek-private.koyeb.app/api/endpoint")
 def find_laptop(data: dict[str, Data]):
 	result = topsis(data)
 	return result
