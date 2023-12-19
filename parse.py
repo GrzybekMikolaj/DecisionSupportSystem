@@ -32,8 +32,8 @@ def parse_weights2dict(data) -> dict:
             print(value)
             deserialized_data[key] = Data(**dict(value))
             algo_settings = (dict(deserialized_data[key]))
-            print("YOOOOOOOOOOOOOO")
-            print(algo_settings)
+            # print("YOOOOOOOOOOOOOO")
+            # print(algo_settings)
             if not algo_settings:
                 print("Brak prawidłowych wag. Algorytm nie może być wykonany.")
                 return{"Error": "0"}

@@ -82,7 +82,7 @@ function postCsvData(input_data) {
     console.log(jsonString);
 
     // Fetch API to send a POST request
-    fetch('http://127.0.0.1:8000/api/endpoint', {
+    fetch('https://decisionsupportsystem-grzybek-private.koyeb.app/api/endpoint', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

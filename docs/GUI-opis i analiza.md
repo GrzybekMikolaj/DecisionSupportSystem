@@ -33,6 +33,18 @@ Kod aplikacji jest dostępny na moim repozytorium GitHub: [GrzybekMikolaj/Decisi
 
 Aplikacja została również uruchomiona i dostępna z internetu pod adresem: [DecisionSupportSystem Koyeb.app](https://decisionsupportsystem-grzybek-private.koyeb.app/)
 
+Aplikację można również uruchomić lokalnie, jedynym wymaganiem jest python w wersji 3.10 lub wyżej
+W folderze z kodem należy wykonać następujące komendy:
+``` powershell
+# Należy zainstalować FastAPI
+pip install -r ".\requirements.txt"
+
+# Uruchomić serwer
+uvicorn main:app --reload
+
+# Serwer będzie dostępny z przeglądarki pod adresem 
+127.0.0.1:8000
+```
 
 ### Sposób użycia
 Aplikacja jest bardzo prosta w obsłudze. Najpierw wnleży załadować plik z danymi poprzez przeciągniecię go we wskazane pole lub kliknięcie w nie i wybranie z systemowego menadżera plików. (Rys. 1)
