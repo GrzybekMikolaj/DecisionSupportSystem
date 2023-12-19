@@ -12,12 +12,12 @@ from pydantic import AliasChoices, BaseModel, Field
 # 	)
 
 class Data(BaseModel):
-    cena: int
-    pojemnosc: int
-    predkosc_odczytu: int = Field(
+    cena: float
+    pojemnosc: float
+    predkosc_odczytu: float = Field(
 		validation_alias = AliasChoices("predkosc-odczytu", "predkosc_odczytu")
 	)
-    predkosc_zapisu: int = Field(
+    predkosc_zapisu: float = Field(
 		validation_alias = AliasChoices("predkosc-zapisu", "predkosc_zapisu")
 	)
 
@@ -29,10 +29,11 @@ def parse_weights2dict(data) -> dict:
 
     for key, value in data.items():
         if key == 'topsis':
+            print(value)
             deserialized_data[key] = Data(**dict(value))
             algo_settings = (dict(deserialized_data[key]))
-            # print("YOOOOOOOOOOOOOO")
-            # print(algo_settings)
+            print("YOOOOOOOOOOOOOO")
+            print(algo_settings)
             if not algo_settings:
                 print("Brak prawidłowych wag. Algorytm nie może być wykonany.")
                 return{"Error": "0"}

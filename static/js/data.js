@@ -56,11 +56,11 @@ function mergeData(){
         }
     }
     // TODO: Dopisz brakujące algorytmy 
-
+    // console.log(algo_settings)
     window.globalVar.splice(1, 0, algo_settings);
     merged_data = window.globalVar;
     // console.log(merged_data);
-
+    // console.log(merged_data)
     postCsvData(merged_data);
 }
 
@@ -74,12 +74,12 @@ function postCsvData(input_data) {
       jsonObjects[key] = {};
     
       header.slice(1).forEach((headerItem, index) => {
-        jsonObjects[key][headerItem] = isNaN(data[index + 1]) ? data[index + 1] : parseInt(data[index + 1], 10);
+        jsonObjects[key][headerItem] = isNaN(data[index + 1]) ? data[index + 1] : parseFloat(data[index + 1], 10);
       });
     });
 
     const jsonString = JSON.stringify(jsonObjects, null, 1);
-    // console.log(jsonString);
+    console.log(jsonString);
 
     // Fetch API to send a POST request
     fetch('http://127.0.0.1:8000/api/endpoint', {

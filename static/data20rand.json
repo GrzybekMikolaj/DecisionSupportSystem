@@ -1,9 +1,9 @@
 {
   "topsis": {
-   "cena": 1,
-   "pojemnosc": 2,
-   "predkosc-odczytu": 3,
-   "predkosc-zapisu": 4
+   "cena": 0.6,
+   "pojemnosc": 0.3,
+   "predkosc-odczytu": 0.05,
+   "predkosc-zapisu": 0.05
   },
   "M1": {
    "cena": 300,

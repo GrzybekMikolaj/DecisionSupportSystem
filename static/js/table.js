@@ -48,7 +48,7 @@
                 continue;
             }
             if (j == 2){
-                cell.textContent = value.toString();
+                cell.textContent = parseFloat(value).toFixed(2);
                 row.appendChild(cell);
                 continue;
             }
