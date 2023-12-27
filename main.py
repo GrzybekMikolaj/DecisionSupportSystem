@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from core.config import settings
 from apis.general_pages.route_homepage import general_pages_router
 from fastapi.staticfiles import StaticFiles
-from topsis import topsis
+from topsis import topsisMethod
 from file_handler import read_json, write_json
 from parse import Data
 
@@ -20,7 +20,7 @@ app = start_application()
 
 @app.post("/api/endpoint")
 def find_laptop(data: dict[str, Data]):
-	result = topsis(data)
+	result = topsisMethod(data)
 	return result
 
 app.mount('/', StaticFiles(directory='static'), name='static')

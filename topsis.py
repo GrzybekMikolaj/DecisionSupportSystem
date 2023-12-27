@@ -4,7 +4,7 @@ from file_handler import read_json
 from parse import parse_weights2dict
 
 
-def topsis(data):
+def topsisMethod(data):
     algo_settings, alternatives = parse_weights2dict(data)
     # print("YOOOOOOOOOOOOOO")
     # print(algo_settings)
@@ -108,12 +108,12 @@ def rank_alternatives(separation_measures):
 # data = read_json(file_path)
 # result = topsis(data)
 
-# file_path_new = 'static/data20rand.json'
-# data_new = read_json(file_path_new)
-# result = topsis(data_new)
+file_path_new = 'static/data20rand.json'
+data_new = read_json(file_path_new)
+result = topsisMethod(data_new)
 
-# print("Rankings:")
-# print(result)
-# for rank, score in result:
-#     rounded_score = round(score, 3)
-#     print(f"{rank}: {rounded_score}") 
+print("Rankings:")
+print(result)
+for rank, score in result:
+    rounded_score = round(score, 3)
+    print(f"{rank}: {rounded_score}") 
