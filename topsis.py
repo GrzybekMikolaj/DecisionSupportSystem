@@ -1,7 +1,7 @@
 import enum
 import math
 from file_handler import read_json
-from parse import parse_weights2dict
+from parser import parse_weights2dict
 
 
 def topsisMethod(data):

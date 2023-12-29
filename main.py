@@ -6,7 +6,7 @@ from apis.general_pages.route_homepage import general_pages_router
 from fastapi.staticfiles import StaticFiles
 from topsis import topsisMethod
 from file_handler import read_json, write_json
-from parse import Data
+from parser import Data
 
 def include_router(app):
 	app.include_router(general_pages_router)

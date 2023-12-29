@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from file_handler import read_json
+from parser import parse_weights2dict
 
 def spcsMethod():
     # Sample data
@@ -14,9 +16,9 @@ def spcsMethod():
     # print(alternatives)
     # print(alt_params)
         
-    # Step 1 - Delet dominated points
+    # Step 1 - Delete dominated points
     dominance_filtered_alternatives = remove_dominated_points(alternatives)
-    # print("\n Non Dominant")
+    # print("\n Non Dominated")
     # print(dominance_filtered_alternatives)
 
     # TODO: Extract reference and aspiration points from fucntion parameter
@@ -41,7 +43,7 @@ def spcsMethod():
 
     # Step 2 - Consider noise in input data 
     perturbation_range = 0.01  # sample noise value, 
-    noisy_alternatives = add_perturbation(alternatives, perturbation_range)
+    noisy_dominated_alternatives = add_perturbation(dominance_filtered_alternatives, perturbation_range)
     # print(alternatives)
     # print("\n")
     # print(noisy_alternatives)
@@ -49,7 +51,7 @@ def spcsMethod():
     # Step 3 - Calculate Skeleton Curve
     skeleton_curve = construct_skeleton_curve(aspiration_points, reference_points)
     print(skeleton_curve)
-    # plot_skeleton_curve(noisy_alternatives, dominance_filtered_alternatives, reference_points, aspiration_points, skeleton_curve)
+    plot_skeleton_curve(alternatives, noisy_dominated_alternatives, reference_points, aspiration_points, skeleton_curve)
 
 
 
@@ -90,38 +92,39 @@ def construct_skeleton_curve(aspiration_points, reference_points):
 
     return skeleton_curve
 
-# def plot_skeleton_curve(perturbed_alternatives, dominance_filtered_alternatives, reference_points, aspiration_points, skeleton_curve):
-#     # Wizualizacja krzywej szkieletowej dla słownikowej postaci danych
-#     plt.figure(figsize=(8, 6))
+def plot_skeleton_curve(alternatives, noisy_dominated_alternatives, reference_points, aspiration_points, skeleton_curve):
+    # Wizualizacja krzywej szkieletowej dla słownikowej postaci danych
+    plt.figure(figsize=(8, 6))
 
-#     for key, value in perturbed_alternatives.items():
-#         plt.scatter(value[0], value[1], label=f'Alternative {key}', alpha=0.7)
+    # for key, value in alternatives.items():
+    #     plt.scatter(value[0], value[1], label=f'Alternative {key}', alpha=0.7)
 
-#     for key, value in dominance_filtered_alternatives.items():
-#         plt.scatter(value[0], value[1], label=f'Non-dominated Alternative {key}', marker='x', color='red', s=100)
+    for key, value in noisy_dominated_alternatives.items():
+        plt.scatter(value[0], value[1], label=f'Non-dominated Alternative {key}', marker='x', color='red', s=100)
 
-#     # plt.scatter([value[0] for key, value in reference_points.items()], [value[1] for key, value in reference_points.items()], label='Reference Points', marker='s', color='green', s=100)
-#     # plt.scatter([value[0] for key, value in aspiration_points.items()], [value[1] for key, value in aspiration_points.items()], label='Aspiration Points', marker='s', color='blue', s=100)
-#     print(skeleton_curve)
-#     # Dodanie krzywych szkieletowych dla wszystkich punktów
-#     xs, ys = zip(*skeleton_curve.values())
-#     keyes = skeleton_curve.keys() 
-#     points = []
-#     for key, x, y in zip(keyes, xs, ys):
-#         points.append([x, y, key])
-#         # plt.scatter(x, y, label=f'Skeleton Curve ({key})', linestyle='dashed', alpha=0.7)
+    #  Visualize reference and aspitration points
+    plt.scatter([value[0] for key, value in reference_points.items()], [value[1] for key, value in reference_points.items()], label='Reference Points', marker='s', color='green', s=100)
+    plt.scatter([value[0] for key, value in aspiration_points.items()], [value[1] for key, value in aspiration_points.items()], label='Aspiration Points', marker='s', color='blue', s=100)
+    
+    # Dodanie krzywych szkieletowych dla wszystkich punktów
+    xs, ys = zip(*skeleton_curve.values())
+    keyes = skeleton_curve.keys() 
+    points = []
+    for key, x, y in zip(keyes, xs, ys):
+        points.append([x, y, key])
+        # plt.scatter(x, y, label=f'Skeleton Curve ({key})', linestyle='dashed', alpha=0.7)
 
-#     print(points)        
-#     if points:
-#         plt.plot(points[0], points[1], label=f'Skeleton Curve ({points[2]})', linestyle='dashed', alpha=0.7)
-#     else:
-#         print("Brak punktów")
+    print(points)        
+    if points:
+        plt.plot(points[0], points[1], label=f'Skeleton Curve ({points[2]})', linestyle='dashed', alpha=0.7)
+    else:
+        print("Brak punktów")
 
-#     # plt.legend()
-#     plt.xlabel('Parameter 1')
-#     plt.ylabel('Parameter 2')
-#     plt.title('Skeleton Curve Construction for Dictionary Data')
-#     plt.show()
+    plt.legend()
+    plt.xlabel('Parameter 1')
+    plt.ylabel('Parameter 2')
+    plt.title('Skeleton Curve Construction for Dictionary Data')
+    plt.show()
 
 
 
@@ -129,6 +132,15 @@ def construct_skeleton_curve(aspiration_points, reference_points):
 spcsMethod()
 
 
+# file_path_new = 'static/data20rand.json'
+# data_new = read_json(file_path_new)
+# result = spcsMethod(data_new)
+
+# print("Rankings:")
+# print(result)
+# for rank, score in result:
+#     rounded_score = round(score, 3)
+#     print(f"{rank}: {rounded_score}") 
 
 
 
