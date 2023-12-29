@@ -1,9 +1,13 @@
 {
-  "topsis": {
-   "cena": 0.6,
-   "pojemnosc": 0.3,
-   "predkosc-odczytu": 0.05,
-   "predkosc-zapisu": 0.05
+  "sp-cs": {
+   "cena-asp": 200,
+   "cena-ref": 400,
+   "pojemnosc-asp": 1500,
+   "pojemnosc-ref": 500,
+   "predkosc-odczytu-asp": 3500,
+   "predkosc-odczytu-ref": 1500,
+   "predkosc-zapisu-asp": 2500,
+   "predkosc-zapisu-ref": 1500
   },
   "M1": {
    "cena": 300,

@@ -6,27 +6,6 @@ from parser import parse_weights2dict
 
 def topsisMethod(data):
     algo_settings, alternatives = parse_weights2dict(data)
-    # print("YOOOOOOOOOOOOOO")
-    # print(algo_settings)
-    # print(alternatives)
-    
-    # algo_settings = {key: value for key, value in data.get("weights", {}).items() if value != 0 and isinstance(value, (int, float))}
-
-    # if not algo_settings:
-    #     print("Brak prawidłowych wag. Algorytm nie może być wykonany.")
-    #     return
-
-    # numeric_parameters = ["cena", "pojemnosc", "predkosc_odczytu", "predkosc_zapisu"]
-
-    # alternatives = {
-    #     key: {
-    #         param: value for param, value in data[key].items() if param in numeric_parameters and isinstance(value, (int, float))
-    #     } for key in data if key not in ["weights"]
-    # }
-
-    # if not alternatives:
-    #     print("Brak prawidłowych danych. Algorytm nie może być wykonany.")
-    #     return
 
     normalized_data = normalize_data(alternatives)
 
@@ -93,9 +72,6 @@ def calculate_separation_measures(weighted_normalized_matrix, ideal_positive, id
 
     return separation_measures
 
-# def rank_alternatives(separation_measures):
-#     rankings = sorted(separation_measures.items(), key=lambda x: x[1], reverse=True)
-#     return rankings
 
 def rank_alternatives(separation_measures):
     rankings = sorted(separation_measures.items(), key=lambda x: x[1], reverse=True)
@@ -104,16 +80,17 @@ def rank_alternatives(separation_measures):
     rankings = dict(rankings)
     return rankings
 
-# file_path = 'static/data.json'
-# data = read_json(file_path)
-# result = topsis(data)
 
-file_path_new = 'static/data20rand.json'
-data_new = read_json(file_path_new)
-result = topsisMethod(data_new)
+def main():
+    file_path_new = 'static/data20rand.json'
+    data_new = read_json(file_path_new)
+    result = topsisMethod(data_new)
 
-print("Rankings:")
-print(result)
-for rank, score in result:
-    rounded_score = round(score, 3)
-    print(f"{rank}: {rounded_score}") 
+    print("Rankings:")
+    print(result)
+    for rank, score in result:
+        rounded_score = round(score, 3)
+        print(f"{rank}: {rounded_score}")
+
+if __name__ == "__main__":
+    main()
