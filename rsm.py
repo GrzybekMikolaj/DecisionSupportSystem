@@ -6,7 +6,7 @@ from parser import parse_weights2dict
 from sp_cs import remove_dominated_points
 
 
-def rms(data):
+def reference_set_method(data):
     #  Unpack algorithm settings and alternatives from input data
     reference_points, alternatives = parse_weights2dict(data)
 
@@ -15,7 +15,7 @@ def rms(data):
     status_quo_points = reference_points[1]
     optimum_limit_points = reference_points[2]
 
-    # Step 1 - Delete dominated points (Create Pareto Set)
+    # Step 1 - Remove dominated points (Create Pareto Set)
     minimize_criteria = {'cena': True, 'pojemnosc': False, 'predkosc_odczytu': False, 'predkosc_zapisu': False}
     pareto_set = remove_dominated_points(alternatives, minimize=minimize_criteria)
 
@@ -97,7 +97,7 @@ def plot_results(alternatives, pareto_set, aspiration_points, status_quo_points,
     for key, value in pareto_set.items():
         x = value['cena']
         y = value['pojemnosc']
-        plt.scatter(x, y, label=f'Pareto Set Alternative {key}', marker='x', color='red')
+        plt.scatter(x, y, label=f'Pareto Set Alternative {key}', marker='o', color='red')
 
     # Plot aspiration points
     x = aspiration_points['cena-asp']
@@ -112,14 +112,14 @@ def plot_results(alternatives, pareto_set, aspiration_points, status_quo_points,
     # Plot optimum limit points
     x = optimum_limit_points['cena-gran']
     y = optimum_limit_points['pojemnosc-gran']
-    plt.scatter(x, y, label=f'Optimum Limit Point', marker='^', color='purple', s=100)
+    plt.scatter(x, y, label=f'Optimum Limit Point', marker='^', color='green', s=100)
 
     plt.legend()
     plt.grid()
     plt.xlabel('Price')
     plt.ylabel('Space')
-    plt.title('RMS Results Diagram')
-    plt.savefig('docs/rms_result.png')
+    plt.title('RSM Results Diagram')
+    plt.savefig('docs/rsm_result.png')
     plt.show()
 
 # Normalize to range (1, 0)
@@ -152,10 +152,10 @@ def scoring_function(distances):
 
 
 def main():
-    file_path_new = 'example_data/data_rms.json'
+    file_path_new = 'example_data/data_rsm.json'
     data = read_json(file_path_new)
 
-    rms(data)
+    reference_set_method(data)
 
 
 if __name__ == "__main__":

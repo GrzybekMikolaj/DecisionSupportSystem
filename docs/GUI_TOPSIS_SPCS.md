@@ -72,49 +72,44 @@ Parametry, które algorytm będzie brał pod uwagę to cena, pojemność dysku o
 Zbiór został dołączony do zadania w postaci pliku .csv gotowego do podania aplikacji
 
 
-id | marka |  cena  | pojemnosc  | prędkosc-odczytu | predkosc-zapisu
----- | ---- | ---- | ---- | ---- | ---- |
-M1 | lexar-sl200 | 300 | 1000   | 550 |      400
-M2 |  adata-elitr-se880 |   300 |     1000 |        2000 |      2000
-M3 |  samsungh-t7 | 405 |  1000   |   1050 |       1000
-M4 | samsung-t7 |   420 |  1000 | 1050 |             1000
-M5 | sandisk-extreme | 400 |  1000 | 1050 |            1000
-M6 |  sandisk-extreme-pro |     625 |     1000 |        2000 | 2000
-
-
-
+| id | marka               | cena | pojemnosc | prędkosc-odczytu | predkosc-zapisu |
+|----|---------------------|------|-----------|------------------|-----------------|
+| M1 | lexar-sl200         | 300  | 1000      | 550              | 400             |
+| M2 | adata-elitr-se880   | 300  | 1000      | 2000             | 2000            |
+| M3 | samsungh-t7         | 405  | 1000      | 1050             | 1000            |
+| M4 | samsung-t7          | 420  | 1000      | 1050             | 1000            |
+| M5 | sandisk-extreme     | 400  | 1000      | 1050             | 1000            |
+| M6 | sandisk-extreme-pro | 625  | 1000      | 2000             | 2000            |
 
 ## Wyniki działania zaimplementowanych algorytmów
 Przyjęto poniższe wagi
 
-Cena  | Pojemność  | Prędkość Odczytu | Prędkość Zapisu
-| ---- | ---- | ---- | ---- |
-0.6 | 0.3 | 0.05 | 0.05
-
-
+| Cena | Pojemność | Prędkość Odczytu | Prędkość Zapisu |
+|------|-----------|------------------|-----------------|
+| 0.6  | 0.3       | 0.05             | 0.05            |
 
 ### Algorytm TOPSIS
 
 Wynikiem działania tego algorytmu przedstawiono poniżej:
 
-Pozycja | Nazwa | Wynik 
----- | ---- | ----
-1 | M2 | 1.0 
-2 | M1 | 0.9719
-3 | M5 | 0.8194 
-4 | M3 | 0.7990 
-5 | M4 | 0.7305
-6 | M6 | 0.0280
+| Pozycja | Nazwa | Wynik  |
+|---------|-------|--------|
+| 1       | M2    | 1.0    |
+| 2       | M1    | 0.9719 |
+| 3       | M5    | 0.8194 |
+| 4       | M3    | 0.7990 |
+| 5       | M4    | 0.7305 |
+| 6       | M6    | 0.0280 |
 
 ### Algorytm SP-CS
 
 Wynikiem działania tego algorytmu przedstawiono poniżej:
 
-Pozycja | Nazwa | Wynik 
----- |-------| ----
-1 | M1    | 5.15
-2 | M4    | 139.18
-3 | M6    | 381.24 
+| Pozycja | Nazwa | Wynik  |
+|---------|-------|--------|
+| 1       | M1    | 5.15   |
+| 2       | M4    | 139.18 |
+| 3       | M6    | 381.24 |
 
 Punkty M2, M3 i M5 zostały uznane jako zdominowane.
 ---- |-------| ----

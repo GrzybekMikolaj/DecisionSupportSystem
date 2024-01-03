@@ -97,24 +97,24 @@ def construct_skeleton_curve(reference_points, aspiration_points):
 
 def plot_curves_and_points(alternatives, non_dominated_alternatives, reference_points, aspiration_points,
                            skeleton_curve, compromise_point):
-    plt.figure(figsize=(8, 6))
+    plt.figure(figsize=(10, 10))
 
     # Plot alternatives
     for key, value in alternatives.items():
         x = value['cena']
         y = value['pojemnosc']
-        plt.scatter(x, y, label=f'Alternative {key}', alpha=0.7, color='grey')
+        plt.scatter(x, y, label=f'Alternative {key}', color='grey')
 
     # Plot non dominated alternatives
     for key, value in non_dominated_alternatives.items():
         x = value['cena']
         y = value['pojemnosc']
-        plt.scatter(x, y, label=f'Non-Dominated Alternative {key}', marker='x', color='red', alpha=0.7)
+        plt.scatter(x, y, label=f'Non-Dominated Alternative {key}', marker='o', color='red')
 
     # Plot reference points
     x = reference_points['cena-ref']
     y = reference_points['pojemnosc-ref']
-    plt.scatter(x, y, label=f'Reference Point', marker='s', color='green', s=100)
+    plt.scatter(x, y, label=f'Reference Point', marker='^', color='green', s=100)
 
     # Plot aspiration points
     x = aspiration_points['cena-asp']
@@ -123,16 +123,16 @@ def plot_curves_and_points(alternatives, non_dominated_alternatives, reference_p
 
     # Plot skeleton curves
     for i, curve_data in skeleton_curve.items():
-        plt.plot(curve_data['interp_x'], curve_data['interp_y'], linestyle='--', label=f'Skeleton Curve', alpha=0.5)
+        plt.plot(curve_data['interp_x'], curve_data['interp_y'], linestyle='--', label=f'Skeleton Curve')
 
     # Plot compromise point
-    plt.scatter(compromise_point[0], compromise_point[1], label=f'Compromise Point', marker='^', color='red', s=100)
+    plt.scatter(compromise_point[0], compromise_point[1], label=f'Compromise Point', marker='x', color='yellow', s=100)
 
     plt.legend()
     plt.grid()
     plt.xlabel('Price')
     plt.ylabel('Space')
-    plt.title('Skeleton Curves Diagram')
+    plt.title('SP-CS Result Diagram')
     plt.savefig('docs/spcs_result.png')
     plt.show()
 
