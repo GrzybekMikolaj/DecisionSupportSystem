@@ -6,7 +6,7 @@ from scipy.spatial.distance import cdist
 
 
 def spcs_method(data):
-    #  Parse algorithm settings and alternatives from input data
+    #  Unpack algorithm settings and alternatives from input data
     algo_settings, alternatives = parse_weights2dict(data)
 
     aspiration_points = algo_settings[0]
@@ -30,7 +30,7 @@ def spcs_method(data):
     projected_points = find_projection(noisy_dominated_alternatives, skeleton_curve)
 
     # Step 5 - Find compromise point and value of scoring function for all non-dominated alternatives
-    score, compromise_point = scoring_function(projected_points, skeleton_curve, noisy_dominated_alternatives)
+    distances, score, compromise_point = scoring_function(projected_points, noisy_dominated_alternatives)
 
     comp_point_x = noisy_dominated_alternatives[compromise_point]['cena']
     comp_point_y = noisy_dominated_alternatives[compromise_point]['pojemnosc']
@@ -39,7 +39,10 @@ def spcs_method(data):
     # Step 6 - Plot all points and skeleton curves
     plot_curves_and_points(alternatives, noisy_dominated_alternatives, reference_points, aspiration_points,
                            skeleton_curve, compromise_point_cords)
-    print(score)
+    print("Distances:", distances)
+    print("Score:", score)
+    print("Best Alternative:", compromise_point)
+
 
 def remove_dominated_points(alternatives, minimize=None):
     if len(alternatives) == 0:
@@ -100,7 +103,7 @@ def plot_curves_and_points(alternatives, non_dominated_alternatives, reference_p
     for key, value in alternatives.items():
         x = value['cena']
         y = value['pojemnosc']
-        plt.scatter(x, y, label=f'Alternative {key}', alpha=0.7,  color='grey')
+        plt.scatter(x, y, label=f'Alternative {key}', alpha=0.7, color='grey')
 
     # Plot non dominated alternatives
     for key, value in non_dominated_alternatives.items():
@@ -130,6 +133,7 @@ def plot_curves_and_points(alternatives, non_dominated_alternatives, reference_p
     plt.xlabel('Price')
     plt.ylabel('Space')
     plt.title('Skeleton Curves Diagram')
+    plt.savefig('docs/spcs_result.png')
     plt.show()
 
 
@@ -171,7 +175,12 @@ def find_projection(noisy_dominated_alternatives, skeleton_curve):
     return projected_points
 
 
-def scoring_function(projected_points, skeleton_curve, non_dominated_points):
+# Normalize from 1 to 0
+def normalize(value, min_value, max_value):
+    return 1 - (value - min_value) / (max_value - min_value)
+
+
+def scoring_function(projected_points, non_dominated_points):
     distances = {}
     for key, proj_data in projected_points.items():
         proj_x = proj_data['projected_x']
@@ -186,11 +195,17 @@ def scoring_function(projected_points, skeleton_curve, non_dominated_points):
     min_key = min(distances, key=lambda k: distances[k])
     compromise_point = min_key
 
-    return distances, compromise_point
+    # Normalize the distances to range (0, 1)
+    min_difference = min(distances.values())
+    max_difference = max(distances.values())
+    score = {
+        alt_key: normalize(diff, min_difference, max_difference) for alt_key, diff in distances.items()
+    }
+    return distances, score, compromise_point
 
 
 def main():
-    file_path_new = 'static/data20rand.json'
+    file_path_new = 'example_data/data_spcs.json'
     data = read_json(file_path_new)
 
     spcs_method(data)

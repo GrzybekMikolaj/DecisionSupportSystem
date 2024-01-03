@@ -82,7 +82,7 @@ def rank_alternatives(separation_measures):
 
 
 def main():
-    file_path_new = 'static/data20rand.json'
+    file_path_new = 'static/dataspcs.json'
     data_new = read_json(file_path_new)
     result = topsisMethod(data_new)
 

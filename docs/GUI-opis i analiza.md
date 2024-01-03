@@ -215,7 +215,7 @@ def rank_alternatives(separation_measures):
 
 
 def main():
-    file_path_new = 'static/data20rand.json'
+    file_path_new = 'static/dataspcs.json'
     data_new = read_json(file_path_new)
     result = topsisMethod(data_new)
 
@@ -427,7 +427,7 @@ def scoring_function(projected_points, skeleton_curve, non_dominated_points):
 
 
 def main():
-    file_path_new = 'static/data20rand.json'
+    file_path_new = 'static/dataspcs.json'
     data = read_json(file_path_new)
 
     spcs_method(data)

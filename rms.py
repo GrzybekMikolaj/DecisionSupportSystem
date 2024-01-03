@@ -1,91 +1,162 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial import distance
+from file_handler import read_json
+from parser import parse_weights2dict
+from sp_cs import remove_dominated_points
 
-# Krok 1: Utworzenie zbioru zawierającego 20 alternatyw z dwoma parametrami wybranymi losowo
-np.random.seed(11)
-alternatives = np.random.rand(20, 2)
 
-def remove_dominated_points(points):
-    if len(points) == 0:
-        return points
+def rms(data):
+    #  Unpack algorithm settings and alternatives from input data
+    reference_points, alternatives = parse_weights2dict(data)
 
-    dominated = [False] * len(points)
-    for i in range(len(points)):
-        for j in range(len(points)):
-            if i != j and all(points[i] <= points[j]):
-                dominated[i] = True
-                break
+    # Unpack reference points set
+    aspiration_points = reference_points[0]
+    status_quo_points = reference_points[1]
+    optimum_limit_points = reference_points[2]
 
-    return points[~np.array(dominated)]
+    # Step 1 - Delete dominated points (Create Pareto Set)
+    minimize_criteria = {'cena': True, 'pojemnosc': False, 'predkosc_odczytu': False, 'predkosc_zapisu': False}
+    pareto_set = remove_dominated_points(alternatives, minimize=minimize_criteria)
 
-dominance_filtered_alternatives = remove_dominated_points(alternatives)
+    # Step 2 - Calc distance between points in Pareto Set and every point from every set in Reference Points Set
+    distances = calculate_distance(aspiration_points, status_quo_points, optimum_limit_points, pareto_set)
 
-# Krok 3: Zdefiniowanie punktów odniesienia i punktów aspiracji
-reference_points = np.array([[0.8, 0.65], [0.75, 0.7]]) # debug only
-# print(reference_points)
+    # Step 3 - Calc scoring based on the distances
+    distances, score, best_alternative = scoring_function(distances)
 
-# Punkt aspiracji to idealna wartość do której ma dążyć
-aspiration_points = np.array([[0.85, 0.75], [0.9, 0.5]])
+    # Step 4 - Visualize results
+    plot_results(alternatives, pareto_set, aspiration_points, status_quo_points, optimum_limit_points)
 
-# Krok 4: Uwzględnienie zakłóceń lub niepewności
-perturbation = np.random.uniform(low=-0.05, high=0.05, size=alternatives.shape)
-noisy_alternatives = alternatives + perturbation
+    print("Distances:", distances)
+    print("Score:", score)
+    print("Best Alternative:", best_alternative)
 
-# Krok 5: Konstrukcja krzywych szkieletowych
-def construct_skeleton_curve(aspiration, reference):
-    t_values = np.linspace(0, 1, len(aspiration))
-    skeleton_curve = []
-    for t, ai, ri in zip(t_values, aspiration, reference):
-        interpolated_point = (1 - t) * ai + t * ri
-        skeleton_curve.append(interpolated_point)
-    return np.array(skeleton_curve)
+def calculate_distance(aspiration_points, status_quo_points, optimum_limit_points, alternatives):
+    distances = {}
 
-skeleton_curve = construct_skeleton_curve(aspiration_points, reference_points)
+    for ref_key, ref_value in aspiration_points.items():
+        ref_x = aspiration_points["cena-asp"]
+        ref_y = aspiration_points["pojemnosc-asp"]
 
-# Wizualizacja krzywej szkieletowej
-plt.scatter(alternatives[:, 0], alternatives[:, 1], label='Alternatives')
-plt.scatter(dominance_filtered_alternatives[:, 0], dominance_filtered_alternatives[:, 1], label='Non-dominated Alternatives')
-plt.scatter(reference_points[:, 0], reference_points[:, 1], label='Reference Points', marker='s', color='red')
-plt.scatter(aspiration_points[:, 0], aspiration_points[:, 1], label='Aspiration Points', marker='s', color='green')
-plt.plot(skeleton_curve[:, 0], skeleton_curve[:, 1], label='Skeleton Curve', linestyle='dashed', color='orange')
-plt.legend()
-plt.xlabel('Parameter 1')
-plt.ylabel('Parameter 2')
-plt.title('Skeleton Curve Construction')
-plt.show()
+        distances_of_set = {}
+        for alt_key, alt_value in alternatives.items():
+            alt_x = alt_value['cena']
+            alt_y = alt_value['pojemnosc']
 
-# Krok 6: Znalezienie rzutu punktu F(u) na krzywej łamanej przy użyciu metryki Czebyszewa
-def find_projection(point, curve):
-    distances = np.max(np.abs(curve - point), axis=1)
-    closest_index = np.argmin(distances)
-    return curve[closest_index]
+            # calculate the distance between reference point and given alternative
+            # dist = euclidean_distance(alt_x, alt_y, ref_x, ref_y)
+            dist = distance.euclidean((alt_x, alt_y), (ref_x, ref_y))
+            # Save this distance in set of dictionaries
+            distances_of_set[alt_key] = [dist]
+    distances["aspiration"] = distances_of_set
 
-# Przykładowy punkt do znalezienia rzutu
-sample_point = np.array([0.5, 0.5])
-projection = find_projection(sample_point, skeleton_curve)
+    for ref_key, ref_value in status_quo_points.items():
+        ref_x = status_quo_points["cena-ref"]
+        ref_y = status_quo_points["pojemnosc-ref"]
 
-# Krok 7: Identyfikacja punktu kompromisowego
-compromise_point = remove_dominated_points(np.vstack((dominance_filtered_alternatives, projection.reshape(1, -1))))
+        distances_of_set = {}
+        for alt_key, alt_value in alternatives.items():
+            alt_x = alt_value['cena']
+            alt_y = alt_value['pojemnosc']
 
-# Krok 8: Ocena wartości funkcji skoringowej
-scoring_function_value = np.sum(np.abs(compromise_point - sample_point))
+            # calculate the distance between reference point and given alternative
+            dist = distance.euclidean((alt_x, alt_y), (ref_x, ref_y))
+            # Save this distance in set of dictionaries
+            distances_of_set[alt_key] = [dist]
+    distances["status_quo"] = distances_of_set
 
-# Krok 9: Analiza wyników i ewaluacja
-print(f'Projection of {sample_point} onto the skeleton curve: {projection}')
-print(f'Compromise Point: {compromise_point}')
-print(f'Scoring Function Value: {scoring_function_value}')
+    for ref_key, ref_value in optimum_limit_points.items():
+        ref_x = optimum_limit_points["cena-gran"]
+        ref_y = optimum_limit_points["pojemnosc-gran"]
 
-# Wizualizacja punktu kompromisowego
-plt.scatter(alternatives[:, 0], alternatives[:, 1], label='Alternatives')
-plt.scatter(dominance_filtered_alternatives[:, 0], dominance_filtered_alternatives[:, 1], label='Non-dominated Alternatives')
-plt.scatter(reference_points[:, 0], reference_points[:, 1], label='Reference Points', marker='s', color='red')
-plt.scatter(aspiration_points[:, 0], aspiration_points[:, 1], label='Aspiration Points', marker='s', color='green')
-plt.plot(skeleton_curve[:, 0], skeleton_curve[:, 1], label='Skeleton Curve', linestyle='dashed', color='orange')
-plt.scatter(projection[0], projection[1], label='Projection', marker='o', color='purple')
-plt.scatter(compromise_point[:, 0], compromise_point[:, 1], label='Compromise Point', marker='x', color='black')
-plt.scatter(sample_point[0], sample_point[1], label='Sample Point', marker='*', color='blue')
-plt.legend()
-plt.xlabel('Parameter 1')
-plt.ylabel('Parameter 2')
-plt.title('Compromise Point Identification')
-plt.show()
+        distances_of_set = {}
+        for alt_key, alt_value in alternatives.items():
+            alt_x = alt_value['cena']
+            alt_y = alt_value['pojemnosc']
+
+            # calculate the distance between reference point and given alternative
+            dist = distance.euclidean((alt_x, alt_y), (ref_x, ref_y))
+            # Save this distance in set of dictionaries
+            distances_of_set[alt_key] = [dist]
+    distances["optimum_limit"] = distances_of_set
+
+    return distances
+
+
+def plot_results(alternatives, pareto_set, aspiration_points, status_quo_points, optimum_limit_points):
+    plt.figure(figsize=(10, 10))
+
+    # Plot alternatives
+    for key, value in alternatives.items():
+        x = value['cena']
+        y = value['pojemnosc']
+        plt.scatter(x, y, label=f'Alternative {key}',  color='grey')
+
+    # Plot non dominated alternatives
+    for key, value in pareto_set.items():
+        x = value['cena']
+        y = value['pojemnosc']
+        plt.scatter(x, y, label=f'Pareto Set Alternative {key}', marker='x', color='red')
+
+    # Plot aspiration points
+    x = aspiration_points['cena-asp']
+    y = aspiration_points['pojemnosc-asp']
+    plt.scatter(x, y, label=f'Aspiration Point', marker='^', color='blue', s=100)
+
+    # Plot Status Quo points
+    # x = status_quo_points['cena-ref']
+    # y = status_quo_points['pojemnosc-ref']
+    # plt.scatter(x, y, label=f'Status Quo Point', marker='^', color='green', s=100)
+
+    # Plot optimum limit points
+    x = optimum_limit_points['cena-gran']
+    y = optimum_limit_points['pojemnosc-gran']
+    plt.scatter(x, y, label=f'Optimum Limit Point', marker='^', color='purple', s=100)
+
+    plt.legend()
+    plt.grid()
+    plt.xlabel('Price')
+    plt.ylabel('Space')
+    plt.title('RMS Results Diagram')
+    plt.savefig('docs/rms_result.png')
+    plt.show()
+
+# Normalize to range (1, 0)
+def normalize(value, min_value, max_value):
+    return 1 - (value - min_value) / (max_value - min_value)
+
+def scoring_function(distances):
+    status_quo_distances = distances.get('status_quo', {})
+    aspiration_distances = distances.get('aspiration', {})
+
+    # Calculating the difference for each alternative
+    difference_scores = {}
+    for alt_key in status_quo_distances:
+        status_quo_distance = status_quo_distances[alt_key][0]
+        aspiration_distance = aspiration_distances.get(alt_key, [0])[0]
+        difference = abs(status_quo_distance - aspiration_distance)
+        difference_scores[alt_key] = difference
+
+    # Normalize the difference_scores to range (0, 1)
+    min_difference = min(difference_scores.values())
+    max_difference = max(difference_scores.values())
+    score = {
+        alt_key: normalize(diff, min_difference, max_difference) for alt_key, diff in difference_scores.items()
+    }
+
+    # Selecting the alternative with the maximum difference
+    best_alternative = min(difference_scores, key=difference_scores.get)
+
+    return difference_scores, score, best_alternative
+
+
+def main():
+    file_path_new = 'example_data/data_rms.json'
+    data = read_json(file_path_new)
+
+    rms(data)
+
+
+if __name__ == "__main__":
+    main()
